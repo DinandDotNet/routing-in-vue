@@ -1,23 +1,28 @@
 <template>
   <h1>Jobs</h1>
+  <div v-if="jobs.length">
   <div v-for="job in jobs" :key="job.id">
     <a class="jobs" :href="'/jobs/' + job.id">
       <span class="stretch">{{ job.title }}</span>
     </a>
   </div>
+  </div>
+  <div v-else>Loading Jobs ....</div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      jobs: [
-        { title: "Ninja ux designer", id: 1, details: "lorem" },
-        { title: "Ninja web developer", id: 2, details: "lorem" },
-        { title: "Ninja vue developer", id: 3, details: "lorem" },
-      ],
+      jobs: [],
     };
   },
+  mounted(){
+  fetch(' http://localhost:3000/jobs')
+  .then((res) => res.json())
+  .then(data => this.jobs = data)
+  .catch(err => console.log(err.message))
+  }
 };
 function jobId(id) {
   return "/jobs/" + id;
